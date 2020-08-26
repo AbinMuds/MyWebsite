@@ -1,0 +1,94 @@
+{% extends 'blog/main.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<style>
+
+  #main .posts{
+    border: 1px solid black;
+    border-radius: 15%;
+    margin:50px;
+    max-height: auto;
+    box-shadow:
+      inset 0 -3em 3em rgba(0,0,0,0.1),
+            0 0  0 2px rgb(255,255,255),
+            0.3em 0.3em 1em rgba(0,0,0,0.3)
+
+  }
+  #main .some{
+
+    display:flex;
+    flex-wrap: wrap;
+  }
+  .date {text-align: center;padding-top:20px;}
+  .ptitle{text-align: center;}
+  .image{border: 2px solid white; padding:20px;}
+  .posttext{border: 20px solid white;overflow:hidden; margin-right:20px;margin-left: 20px;max-height: 200px;
+    box-shadow:
+  0 0.3px 2.2px rgba(0, 0, 0, 0.009),
+  0 0.7px 5.3px rgba(0, 0, 0, 0.017),
+  0 1.3px 10px rgba(0, 0, 0, 0.026),
+  0 2.2px 17.9px rgba(0, 0, 0, 0.035),
+  0 4.2px 33.4px rgba(0, 0, 0, 0.047),
+  0 10px 80px rgba(0, 0, 0, 0.07)}
+  .postcomment{text-align:center;margin-bottom: 20px;}
+  .imga{width:70%;height:500px;}
+</style>
+<!-- Main -->
+  <div id="main">
+
+    <!-- Featured Post -->
+      <article class="post featured">
+        <header class="major">
+          <h2><a href="#">Full-Stack Developer<br />
+          Abinash Mudbhari</a></h2>
+          <p>Long time ago people who sacrificed their<br />
+          sleep, family, food, laughter and other<br />
+          luxuries of life were called SAINTS.<br />
+          Now they are called<br />
+          <strong>Programmers</strong></p>
+        </header>
+
+          <img style="width:60%" src="media/pics/abinash_pic.jpg" alt="">
+
+
+        <ul class="actions special">
+          <li><a style="margin-top:30px;" href="{% url 'about' %}" class="button large">About Me</a></li>
+        </ul>
+
+
+      </article>
+      <ul class="actions special">
+        <li><a href="#" class="button large">Recent Posts</a></li>
+      </ul>
+      <div class="some">
+
+          {% for post in post_list %}
+          <div class="col-lg-6">
+            <section class="posts">
+              <article >
+                <header>
+                  <span class="date">{{ post.published_date|date:"D M Y"}}</span>
+                  <h2 class="ptitle"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+                </header>
+                <a href="{% url 'post_detail' pk=post.pk %}" class="image fit"><img src="{{ post.post_image.url }}" alt="" /></a>
+                <p class="posttext">{{ post.text }}</p>
+                <ul class="actions special">
+                  <li><a href="{% url 'post_detail' pk=post.pk %}" class="button">Full Story</a></li>
+                  <li> <a class="button" href="{{ post.link_to_code }}">Mycode</a></li>
+                </ul>
+                <div class="postcomment">
+                  <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approve_comment.count }}</a>
+
+                </div>
+
+              </article>
+              </section>
+
+          </div>
+
+
+      {% endfor %}
+        </div>
+
+
+{% endblock %}

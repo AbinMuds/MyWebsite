@@ -1,0 +1,92 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<!-- glyphicons -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+    .date {text-align: center;}
+    .ptitle{text-align: center;}
+    .posttext{border: 20px solid white;overflow: hidden;margin-right:20px;margin-left: 20px;
+      max-height: 750px;
+      overflow: scroll;
+      box-shadow:
+    0 0.3px 2.2px rgba(0, 0, 0, 0.009),
+    0 0.7px 5.3px rgba(0, 0, 0, 0.017),
+    0 1.3px 10px rgba(0, 0, 0, 0.026),
+    0 2.2px 17.9px rgba(0, 0, 0, 0.035),
+    0 4.2px 33.4px rgba(0, 0, 0, 0.047),
+    0 10px 80px rgba(0, 0, 0, 0.07)}
+  .some{
+      border: 1px solid black;
+      margin:10px;
+      padding: 20px;
+       max-width: 50%;
+      box-shadow:
+        inset 0 -3em 3em rgba(0,0,0,0.1),
+              0 0  0 2px rgb(255,255,255),
+              0.3em 0.3em 1em rgba(0,0,0,0.3)
+    }
+    .author{text-decoration: underline;}
+    .coment{overflow: hidden;margin-right:20px;margin-left: 20px;}
+    .addcm{background-color: skyblue;}
+    .imag{width: 50%;float:right;}
+</style>
+<div id="main">
+    <h1 class="ptitle">{{ post.title }}</h1>
+    {% if post.published_date %}
+      <div class="date">
+        {{ post.published_date }}
+      </div>
+    {% else %}
+    <ul class="actions special">
+      <li><a class="button large" href="{% url 'post_publish' pk=post.pk %}">Publish</a></li>
+    </ul>
+
+    {% endif %}
+    <div class="imag">
+      <img class="image main" src="{{ post.post_image.url }}" alt="no image found">
+    </div>
+
+    <p class="posttext">{{ post.text }}</p>
+
+    {% if user.is_authenticated %}
+    <ul class="actions special">
+      <li><a class="button large" href="{% url 'post_edit' pk=post.pk %}"><span class="fa fa-pencil"></span></a></li>
+      <li><a class="button large" href="{% url 'post_remove' pk=post.pk %}"><span class="fa fa-remove"></span></a></li>
+    </ul>
+    {% endif %}
+
+    <ul class="actions special">
+      <li><a class="button large" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a></li>
+    </ul>
+
+
+      <div class="container">
+
+
+      {% for comment in post.comments.all %}
+      <br>
+
+        {% if user.is_authenticated or comment.approved_comment %}
+
+                {{ comment.date_of_creation }}
+
+                {% if not comment.approved_comment %}
+                    <a class="btn btn-primary" href="{% url 'comment_remove' pk=comment.pk %}"><span class="fa fa-remove"></span></a>
+                    <a class="btn btn-primary" href="{% url 'comment_approve' pk=comment.pk %}"><span class="fa fa-check"></span></a>
+                {% endif %}
+      <div class="some">
+            <p class="coment">{{ comment.text }}</p>
+            <p class="author">Posted by: <strong>{{ comment.author }}</strong></p>
+
+        {% endif %}
+      </div>
+
+      {% empty %}
+      <ul class="actions special">
+        <li><p>No comments posted.</p></li>
+      </ul>
+
+      {% endfor %}
+    </div>
+</div>
+{% endblock %}
