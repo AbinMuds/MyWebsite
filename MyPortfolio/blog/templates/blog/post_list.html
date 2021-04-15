@@ -1,4 +1,7 @@
 {% extends 'blog/main.html' %}
+
+{% load humanize %}
+
 {% block content %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 <style>
@@ -58,7 +61,7 @@
 
       </article>
       <ul class="actions special">
-        <li><a href="#" class="button large">Recent Posts</a></li>
+        <li><a href="#" class="button large">Recent Projects</a></li>
       </ul>
       <div class="some">
 
@@ -67,14 +70,14 @@
             <section class="posts">
               <article >
                 <header>
-                  <span class="date">{{ post.published_date|date:"D M Y"}}</span>
+                  <span class="date">{{ post.published_date|naturaltime}}</span>
                   <h2 class="ptitle"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
                 </header>
-                <a href="{% url 'post_detail' pk=post.pk %}" class="image fit"><img src="{{ post.post_image.url }}" alt="" /></a>
-                <p class="posttext">{{ post.text }}</p>
+                <a href="{% url 'post_detail' pk=post.pk %}" class="image fit"><img style="height:230px;"src="{{ post.post_image.url }}" alt="" /></a>
+                <p class="posttext">{{ post.text|truncatewords:20 }}</p>
                 <ul class="actions special">
                   <li><a href="{% url 'post_detail' pk=post.pk %}" class="button">Full Story</a></li>
-                  <li> <a class="button" href="{{ post.link_to_code }}">Mycode</a></li>
+                  <li> <a class="button" href="{{ post.link_to_code }}">Link</a></li>
                 </ul>
                 <div class="postcomment">
                   <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approve_comment.count }}</a>
@@ -88,7 +91,7 @@
 
 
       {% endfor %}
-        </div>
+    </div>
 
 
 {% endblock %}
